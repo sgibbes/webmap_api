@@ -11,7 +11,7 @@ import sys, tty, termios
 
 # get username and password
 username = input('ArcGIS Online username: ')
-passwd = creds.get_paswd()
+passwd = input('ArcGIS Online password: ')
 
 
 # connect to my arcgis account (Which happens to be part of IRWIN)
