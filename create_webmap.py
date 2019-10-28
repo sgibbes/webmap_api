@@ -5,9 +5,6 @@ from arcgis.gis import GIS
 from arcgis.mapping import MapImageLayer
 from arcgis.mapping import WebMap
 
-import creds
-
-import sys, tty, termios
 
 # get username and password
 username = input('ArcGIS Online username: ')
