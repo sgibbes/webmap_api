@@ -5,7 +5,6 @@ from arcgis.gis import GIS
 from arcgis.mapping import MapImageLayer
 from arcgis.mapping import WebMap
 
-from creds import get_creds
 import creds
 
 import sys, tty, termios
