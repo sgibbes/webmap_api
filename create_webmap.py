@@ -1,5 +1,6 @@
 import json
 import time
+import sys
 
 from arcgis.gis import GIS
 from arcgis.mapping import MapImageLayer
@@ -44,16 +45,20 @@ webmap_item_properties = {'title': webmap_name,
                          'tags':['webmap', 'epa', 'python']}
 
 my_webmap.save(webmap_item_properties)
-# wait a few seconds
-time.sleep(5)
 
 # to make changes to the initial map, need to share it publically
 my_webmap = my_gis.content.search(webmap_name, item_type="Web Map")
+
+# make sure webmap exists first
+while len(my_webmap) == 0:
+    if len(my_webmap) == 1:
+        break
+
 my_webmap = my_webmap[0]
 my_webmap.share(everyone=True)
 
 # update extent of webmap- this one is Manhattan
-update_parameters = {'extent':'-74.227,40.537,-73.601,40.862'}
+update_parameters = {'extent': '-74.227,40.537,-73.601,40.862'}
 my_webmap.update(update_parameters)
 
 # going to update symbology. Open this file, which defines symbology
