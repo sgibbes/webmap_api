@@ -6,15 +6,17 @@
       <meta charset="utf-8">
       <script>
         require([
-            "esri/Map",
+            "esri/WebMap",
             "esri/views/MapView",
             "esri/layers/MapImageLayer",
-            "esri/layers/FeatureLayer"
+            "esri/layers/FeatureLayer",
+            "esri/widgets/Popup",
+            "esri/widgets/Legend"
           ],
-          function(Map, MapView, MapImageLayer, FeatureLayer)
+          function(WebMap, MapView, MapImageLayer, FeatureLayer, Popup, Legend)
           {
 
-            var map = new Map({
+            var map = new WebMap({
               basemap: "dark-gray-vector"
             });
 
@@ -54,7 +56,7 @@
                type: "simple", // autocasts as new SimpleRenderer()
                   symbol: {
                     type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-                    size: 5,
+                    size: 6,
                     color: fillcolor,
                     outline: "black"
                   }
@@ -62,9 +64,15 @@
               };
 
 
+            var popupLayer = { //https://developers.arcgis.com/javascript/latest/guide/configure-pop-ups/
+              "title": "{PRIMARY_NAME}",
+              "content": "<b>PRIMARY_NAME:</b> {PRIMARY_NAME}<br>"
+            } 
+
             var superfund_pointsLayer = new FeatureLayer({
               url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/efpoints/MapServer/0",
-              // renderer: trailheadsRenderer,
+              outFields: ["PRIMARY_NAME"],
+              popupTemplate: popupLayer,
               renderer: createPointSymbol("red")
             });
 
@@ -72,7 +80,8 @@
 
             var toxicreleaseLayer = new FeatureLayer({
               url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/efpoints/MapServer/1",
-              renderer: createPointSymbol("orange")
+              renderer: createPointSymbol("orange"),
+              popupTemplate: popupLayer
             });
 
             map.add(toxicreleaseLayer);
@@ -84,7 +93,7 @@
             });
 
             map.add(countiesLayer);
-            
+
             var statesLayer = new FeatureLayer({
               url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/Boundaries/MapServer/6",
               visible : true,
@@ -92,8 +101,6 @@
             });
 
             map.add(statesLayer);
-
-
 
           });
 
