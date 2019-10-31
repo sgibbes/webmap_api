@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/themes/light/main.css">
+      <script src="https://js.arcgis.com/4.13/"></script>
+      <meta charset="utf-8">
+      <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/MapImageLayer",
+            "esri/layers/FeatureLayer"
+          ],
+          function(Map, MapView, MapImageLayer, FeatureLayer)
+          {
+
+            var map = new Map({
+              basemap: "dark-gray-vector"
+            });
+
+            var view = new MapView({
+              container: "viewDiv",
+              map: map,
+              center: [-73.914, 40.6995], // longitude, latitude
+              zoom: 11
+
+            });
+
+            var trailheadsRenderer = { // messing around with ESRI examples
+                type: "simple",
+                symbol: {
+                  type: "picture-marker",
+                  url: "http://static.arcgis.com/images/Symbols/NPS/npsPictograph_0231b.png",
+                  width: "18px",
+                  height: "18px"
+                }
+              }
+
+            function createAdminBoundSym(linecolor) {
+              return {
+                type: "simple",
+                symbol: {
+                  type: "simple-fill",
+                  color: [0, 0, 0, 0],
+                  outline: {
+                    color: linecolor,
+                    width: 1.5
+                  }
+                }
+              }};
+            
+            function createPointSymbol(fillcolor) {
+              return {
+               type: "simple", // autocasts as new SimpleRenderer()
+                  symbol: {
+                    type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+                    size: 5,
+                    color: fillcolor,
+                    outline: "black"
+                  }
+                }
+              };
+
+
+            var superfund_pointsLayer = new FeatureLayer({
+              url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/efpoints/MapServer/0",
+              // renderer: trailheadsRenderer,
+              renderer: createPointSymbol("red")
+            });
+
+            map.add(superfund_pointsLayer);
+
+            var toxicreleaseLayer = new FeatureLayer({
+              url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/efpoints/MapServer/1",
+              renderer: createPointSymbol("orange")
+            });
+
+            map.add(toxicreleaseLayer);
+            
+            var countiesLayer = new FeatureLayer({
+              url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/Boundaries/MapServer/5",
+              visible : true,
+              renderer: createAdminBoundSym("red")
+            });
+
+            map.add(countiesLayer);
+            
+            var statesLayer = new FeatureLayer({
+              url: "https://geopub.epa.gov/arcgis/rest/services/EMEF/Boundaries/MapServer/6",
+              visible : true,
+              renderer: createAdminBoundSym("green")
+            });
+
+            map.add(statesLayer);
+
+
+
+          });
+
+
+      </script>
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS JavaScript Superfund and Toxic Release App</title>
+    <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
