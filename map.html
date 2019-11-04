@@ -102,8 +102,34 @@
 
             map.add(statesLayer);
 
-          });
 
+          var legend = new Legend({
+
+            view: view,
+            layerInfos: [
+              
+              {
+                layer: toxicreleaseLayer,
+                title: "Toxic Releases"
+              },
+              {            
+                layer: superfund_pointsLayer,
+                title: "Superfund"
+              },
+              {
+                layer: statesLayer,
+                title: "States"
+              },
+              {
+                layer: countiesLayer,
+                title: "Counties"
+              },
+            ]
+          });
+          legend.startup();
+          view.ui.add(legend, "bottom-right");
+   
+        });
 
       </script>
 
