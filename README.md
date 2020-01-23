@@ -25,3 +25,6 @@ From inside the Python3 environment,
 enter ArcGIS Online credentials when prompted
 
 after the code completed, go to your content and find the web map
+
+Running the html code:
+-  python3 -m http.server

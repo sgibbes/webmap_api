@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
   <head>
       <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/themes/light/main.css">
@@ -6,18 +6,25 @@
       <meta charset="utf-8">
       <script>
         require([
-            "esri/WebMap",
+            "esri/WebMap", // to start: python3 -m http.server
             "esri/views/MapView",
             "esri/layers/MapImageLayer",
             "esri/layers/FeatureLayer",
             "esri/widgets/Popup",
-            "esri/widgets/Legend"
+            "esri/widgets/Legend",
+            "esri/layers/GraphicsLayer",
+            "esri/widgets/Sketch",
+            "esri/portal/Portal",
           ],
-          function(WebMap, MapView, MapImageLayer, FeatureLayer, Popup, Legend)
+          function(WebMap, MapView, MapImageLayer, FeatureLayer, Popup, Legend, GraphicsLayer, Sketch, Portal)
           {
 
+            
+            var graphicsLayer = new GraphicsLayer();
+
             var map = new WebMap({
-              basemap: "dark-gray-vector"
+              basemap: "dark-gray-vector",
+              layers: [graphicsLayer]
             });
 
             var view = new MapView({
@@ -27,6 +34,14 @@
               zoom: 11
 
             });
+
+
+            var sketch = new Sketch ({
+              view: view,
+              layer: graphicsLayer
+            });
+
+            view.ui.add(sketch, 'top-right');
 
             var trailheadsRenderer = { // messing around with ESRI examples
                 type: "simple",
@@ -128,7 +143,28 @@
           });
           legend.startup();
           view.ui.add(legend, "bottom-right");
-   
+
+        webmap_item_properties = {'title': 'webscene',
+                         'snippet': 'webscene',
+                         'tags':['webmap', 'epa', 'python']}
+
+        print('saving webmap')
+        map.save(webmap_item_properties) 
+
+        // once the portal is loaded save the web scene to the portal as a new web scene
+        // portal.load().then(function() {
+        //   map.saveAs({
+        //     title: "My Scene",
+        //     portal: portal
+        //   })
+        //   .then(function() {
+        //     console.log("Scene was saved");
+        //   })
+        //   .catch(function(err) {
+        //     console.log(err);
+        //   });
+// })
+
         });
 
       </script>
